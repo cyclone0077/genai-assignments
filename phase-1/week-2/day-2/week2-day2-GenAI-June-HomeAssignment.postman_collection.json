@@ -1,0 +1,161 @@
+{
+  "info": {
+    "_postman_id": "fa87ecf7-5fea-4abe-9517-0f64a72f3365",
+    "name": "GenAI-June-HomeAssignment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18928924",
+    "_collection_link": "https://go.postman.co/collection/18928924-fa87ecf7-5fea-4abe-9517-0f64a72f3365?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "S01-Text to Audio",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer $GROQ_API_KEY"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"model\": \"canopylabs/orpheus-v1-english\",\r\n    \"input\": \"Here are the rules for the two-player Deal game. First, both players start the match with a maximum of one hundred and sixty points. Second, the game consists of exactly two deals. Please note that the drop option is not available in Deal games. Third, at the end of the second deal, the player with the highest points will be declared the winner. Finally, if there is a tie at the end of the second deal, an extra tie-breaker deal will be played to decide the ultimate winner\",\r\n    \"voice\": \"diana\",\r\n    \"response_format\": \"wav\",\r\n    \"speed\" : 1.5\r\n  }",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.groq.com/openai/v1/audio/speech",
+          "protocol": "https",
+          "host": [
+            "api",
+            "groq",
+            "com"
+          ],
+          "path": [
+            "openai",
+            "v1",
+            "audio",
+            "speech"
+          ]
+        },
+        "description": "Generated from cURL: curl https://api.groq.com/openai/v1/audio/speech \\\r\n  -X POST \\\r\n  -H \"Authorization: Bearer $GROQ_API_KEY\" \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\r\n    \"model\": \"canopylabs/orpheus-v1-english\",\r\n    \"input\": \"Welcome to Orpheus text-to-speech. [cheerful] This is an example of high-quality English audio generation with vocal directions support.\",\r\n    \"voice\": \"austin\",\r\n    \"response_format\": \"wav\"\r\n  }' \\\r\n  --output orpheus-english.wav\r\n"
+      },
+      "response": []
+    },
+    {
+      "name": "S02- MultiLingual",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"model\": \"llama-3.3-70b-versatile\",\n  \"messages\": [\n    {\"role\": \"system\", \"content\": \"You are a professional translator. Translate to Hindi. Preserve tone, idioms, and meaning. Return only the translation.\"},\n    {\"role\": \"user\", \"content\": \"Here are the rules for the two-player Deal game. First, both players start the match with a maximum of one hundred and sixty points. Second, the game consists of exactly two deals. Please note that the drop option is not available in Deal games. Third, at the end of the second deal, the player with the highest points will be declared the winner. Finally, if there is a tie at the end of the second deal, an extra tie-breaker deal will be played to decide the ultimate winner\"}\n  ],\n  \"temperature\": 0.3,\n  \"max_completion_tokens\": 2000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.groq.com/openai/v1/chat/completions",
+          "protocol": "https",
+          "host": [
+            "api",
+            "groq",
+            "com"
+          ],
+          "path": [
+            "openai",
+            "v1",
+            "chat",
+            "completions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "S03-GenerateAPITestcasesFromSwaggerCode",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"model\": \"openai/gpt-oss-120b\",\n  \"messages\": [\n    {\n      \"role\": \"system\",\n      \"content\": \"You are a Senior API Test Automation Architect with strong expertise in Java, Rest Assured, TestNG, Maven, and API schema-driven test generation.\"\n    },\n    {\n      \"role\": \"user\",\n      \"content\": \"I — INSTRUCTION\\nGenerate comprehensive API test cases designed specifically to be automated using Rest Assured.\\n\\nMANDATORY RULES:\\n\\nDo NOT generate Java or Rest Assured code. Generate the test scenarios and test cases only.\\n\\nInclude positive, negative, and edge-case scenarios for each endpoint.\\n\\nDetail the specific HTTP methods, endpoints, and required headers (e.g., Content-Type, Authorization).\\n\\nSpecify the exact JSON payloads required for the requests (create mock data relevant to a subscription service).\\n\\nClearly define the Expected Results, including the exact HTTP Status Codes and specific JSON response fields to assert (using JsonPath logic).\\n\\nC — CONTEXT\\nThese test cases will be used as the blueprint by QA Automation Engineers to build a robust Rest Assured framework. The test cases must clearly map out exactly what needs to be verified in the API response so the engineer knows exactly what assertions to write in their code.\\n\\nP — PERSONA\\nYou are a Senior API Test Analyst known for writing meticulous, edge-case-inclusive, and automation-ready API test documentation.\\n\\nO — OUTPUT\\nOutput the test cases in a clean, structured format (like a Markdown table or clearly separated blocks).\\nFor each test case, include:\\n\\nTest Case ID: (e.g., TC_001)\\n\\nScenario Description: - HTTP Method: - Endpoint/Path: - Headers / Auth: - Request Payload: (Include sample JSON)\\n\\nExpected Status Code: - Response Assertions: (What exact fields or data types to verify in the response body)\\n\\nT — TARGET API:\\nAPI Name: Subscriptions API\\nBase URI: https://gateway-qa-8.jungleerummyqa.com\\nResource to Test: Subscriptions\\nAvailable Endpoints:\\n\\nCreate Subscription: POST /subs-api/v1/subscriptions\\n\\nGet Subscription: GET /subs-api/v1/subscriptions/{subscriptionId}\\n\\nUpdate Subscription: PUT (or PATCH) /subs-api/v1/subscriptions/{subscriptionId}\\n\\nDelete Subscription: DELETE /subs-api/v1/subscriptions/{subscriptionId}\"\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://api.groq.com/openai/v1/chat/completions",
+          "protocol": "https",
+          "host": [
+            "api",
+            "groq",
+            "com"
+          ],
+          "path": [
+            "openai",
+            "v1",
+            "chat",
+            "completions"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "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",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUri",
+      "value": ""
+    },
+    {
+      "key": "apikey",
+      "secret": true
+    }
+  ]
+}
